@@ -1,0 +1,13 @@
+{
+  "name": "sunlit-earth-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public"
+  },
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "sunlit.earth", "custom_domain": true },
+    { "pattern": "www.sunlit.earth", "custom_domain": true }
+  ]
+}
