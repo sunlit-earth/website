@@ -1,0 +1,53 @@
+# The highlights of each release for the "What's new" section, newest first: a few short entries, one emoji each.
+# A release without an entry here shows only the link to its release notes.
+
+[[release]]
+version = "0.5.0"
+changes = [
+  { emoji = "🎛️", text = "Camera and time controls right in the preview" },
+  { emoji = "☀️", text = "A new camera mode that faces the Sun while Earth turns below" },
+  { emoji = "🚀", text = "Start automatically when you log in" },
+  { emoji = "🎯", text = "The preview and the wallpaper now match exactly" },
+]
+
+[[release]]
+version = "0.4.0"
+changes = [
+  { emoji = "🧊", text = "Sea ice in the Arctic and Antarctic, changing with the month" },
+  { emoji = "☁️", text = "Clearer clouds over cold regions, and an option to turn the clouds off" },
+  { emoji = "↩️", text = "Reset settings to their defaults one by one or by group" },
+]
+
+[[release]]
+version = "0.3.0"
+changes = [
+  { emoji = "🍂", text = "Seasonal textures: Earth's surface changes every month" },
+  { emoji = "🪶", text = "Lower memory use with the same image quality" },
+]
+
+[[release]]
+version = "0.2.2"
+changes = [
+  { emoji = "🐛", text = "Fixed scrolling in the About window" },
+]
+
+[[release]]
+version = "0.2.1"
+changes = [
+  { emoji = "🪟", text = "macOS: the settings window has its title bar and frame back" },
+]
+
+[[release]]
+version = "0.2.0"
+changes = [
+  { emoji = "🍎", text = "macOS support for Apple silicon and Intel" },
+  { emoji = "🐧", text = "Linux on ARM64" },
+  { emoji = "📦", text = "Install with Scoop or Homebrew" },
+  { emoji = "🖥️", text = "Wallpapers on many more Linux desktops" },
+]
+
+[[release]]
+version = "0.1.0"
+changes = [
+  { emoji = "🎉", text = "The first public release, for Windows and Linux on x86-64" },
+]

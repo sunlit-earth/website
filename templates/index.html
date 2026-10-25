@@ -1,0 +1,215 @@
+{%- set data = load_data(path="data/releases.json") -%}
+{%- set curated = load_data(path="changes.toml") -%}
+{%- set latest = data.latest -%}
+{%- set files = latest.files -%}
+{%- set repo = config.extra.repo -%}
+{%- set hero_path = "images/" ~ section.extra.hero -%}
+{%- set hero_meta = get_image_metadata(path=hero_path) -%}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ config.title }}: Earth from space as your wallpaper</title>
+  <meta name="description" content="{{ config.description }}">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#05070d">
+  <link rel="canonical" href="{{ config.base_url }}/">
+  <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ get_url(path='site.css', cachebust=true) }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ config.title }}">
+  <meta property="og:description" content="{{ config.description }}">
+  <meta property="og:url" content="{{ config.base_url }}/">
+  {%- set og = resize_image(path=hero_path, width=1200, height=630, op="fill", format="jpg", quality=85) %}
+  <meta property="og:image" content="{{ og.url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="{{ get_url(path='site.js', cachebust=true) }}" defer></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  {% include "icons/windows.html" %}
+  {% include "icons/apple.html" %}
+  {% include "icons/linux.html" %}
+  {% include "icons/copy.html" %}
+</svg>
+
+<header class="hero">
+  <div class="hero-media">
+    <img class="hero-img" src="{{ get_url(path=hero_path) }}" width="{{ hero_meta.width }}" height="{{ hero_meta.height }}" fetchpriority="high" alt="Sunrise over Earth, with city lights on the night side beneath a starry sky">
+  </div>
+  <div class="hero-text wrap">
+    <h1>Sunlit Earth</h1>
+    <p class="tagline">A free and open source desktop app that renders Earth as seen from space and sets it as your wallpaper. Your view of Earth updates throughout the day.</p>
+    <p class="cta">
+      <a class="button primary" id="hero-download" href="#download">Download</a>
+      <a class="button" href="{{ repo }}">Source on GitHub</a>
+    </p>
+    <p class="meta">Version {{ latest.version }} for Windows, macOS and Linux</p>
+  </div>
+</header>
+
+<main>
+  <section id="screenshots" class="wrap">
+    <h2>Screenshots</h2>
+    <div class="carousel" data-gallery>
+      <div class="carousel-track" tabindex="0" aria-label="Screenshots, scroll sideways for more">
+        {%- set variants = true %}{% set sizes = "(min-width: 1184px) 1120px, calc(100vw - 32px)" %}
+        {%- for shot in section.extra.gallery %}
+        <figure class="slide">{% include "shot.html" %}<figcaption>{{ shot.caption }}</figcaption></figure>
+        {%- endfor %}
+      </div>
+      <button class="carousel-prev" type="button" aria-label="Previous screenshot">‹</button>
+      <button class="carousel-next" type="button" aria-label="Next screenshot">›</button>
+      <div class="carousel-bar">
+        <div class="carousel-dots"></div>
+        <button class="carousel-full" type="button">Full screen</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="wrap">
+    <h2>Features</h2>
+    <ul class="features">
+      <li><span class="emoji" aria-hidden="true">📸</span><h3>Your view</h3><p>Camera controls and presets let you choose your view of Earth.</p></li>
+      <li><span class="emoji" aria-hidden="true">🌍</span><h3>The time of day</h3><p>Sunlight and city lights follow the current date and time, and the wallpaper updates throughout the day.</p></li>
+      <li><span class="emoji" aria-hidden="true">❄️</span><h3>The seasons</h3><p>Detailed surface textures based on NASA imagery change with the seasons, sea ice included.</p></li>
+      <li><span class="emoji" aria-hidden="true">⛅️</span><h3>The weather</h3><p>Recent satellite cloud imagery shows the changing weather.</p></li>
+      <li><span class="emoji" aria-hidden="true">🌌</span><h3>The sky</h3><p>The Sun, Moon, planets, and stars are rendered at their astronomically correct positions.</p></li>
+      <li><span class="emoji" aria-hidden="true">🖥️</span><h3>Your monitors</h3><p>Wallpapers fit your monitor layout, as mirrored views or as one continuous panorama.</p></li>
+      <li><span class="emoji" aria-hidden="true">📦</span><h3>Works offline</h3><p>All contents are shipped with the app. Only recent cloud imagery need an internet connection.</p></li>
+      <li><span class="emoji" aria-hidden="true">⚙️</span><h3>Everything adjustable</h3><p>Camera position, lighting, the atmosphere, and the size and brightness of the Sun, Moon and stars.</p></li>
+    </ul>
+  </section>
+
+  <section id="download" class="wrap">
+    <h2>Download</h2>
+    <p class="release-line">Version {{ latest.version }}, released <time datetime="{{ latest.date }}">{{ latest.date_text }}</time>. <a href="{{ latest.url }}">Release notes</a></p>
+    <p class="notice">Sunlit Earth is in public beta. If you notice an issue, please consider <a href="{{ repo }}/issues">reporting it on GitHub</a>.</p>
+
+    <div class="os-tabs" role="tablist" aria-label="Operating system">
+      <button type="button" role="tab" id="tab-windows" aria-controls="panel-windows" aria-selected="true" data-os="windows"><svg class="os-icon" aria-hidden="true"><use href="#icon-windows"/></svg>Windows</button>
+      <button type="button" role="tab" id="tab-macos" aria-controls="panel-macos" aria-selected="false" tabindex="-1" data-os="macos"><svg class="os-icon" aria-hidden="true"><use href="#icon-apple"/></svg>macOS</button>
+      <button type="button" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="false" tabindex="-1" data-os="linux"><svg class="os-icon" aria-hidden="true"><use href="#icon-linux"/></svg>Linux</button>
+    </div>
+
+    <div class="os-panels">
+      <div class="os-panel selected" id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" data-os="windows">
+        <div class="os-info">
+          <h3 class="os-title"><svg class="os-icon" aria-hidden="true"><use href="#icon-windows"/></svg>Windows</h3>
+          <div class="files">
+            <a class="button primary" href="{{ files['windows-x86_64'].url }}">Download .zip <span class="size">{{ files['windows-x86_64'].size }}</span></a>
+          </div>
+          <p class="arch-note">For x86-64.</p>
+          <div class="pm">
+            <h4>With Scoop</h4>
+            <div class="commands">
+              <div class="command-list">
+                <div class="command"><code>scoop bucket add sunlit-earth https://github.com/sunlit-earth/scoop-bucket</code><button class="copy" type="button" title="Copy to clipboard" aria-label="Copy command" hidden><svg class="i-copy" aria-hidden="true"><use href="#icon-copy"/></svg><svg class="i-check" aria-hidden="true"><use href="#icon-check"/></svg></button></div>
+                <div class="command"><code>scoop install sunlit-earth/sunlit-earth</code><button class="copy" type="button" title="Copy to clipboard" aria-label="Copy command" hidden><svg class="i-copy" aria-hidden="true"><use href="#icon-copy"/></svg><svg class="i-check" aria-hidden="true"><use href="#icon-check"/></svg></button></div>
+              </div>
+              <button class="copy copy-all" type="button" title="Copy all to clipboard" aria-label="Copy all commands" hidden><svg class="i-copy" aria-hidden="true"><use href="#icon-copy"/></svg><svg class="i-check" aria-hidden="true"><use href="#icon-check"/></svg></button>
+            </div>
+          </div>
+          <details>
+            <summary>First start</summary>
+            <p>Unpack the zip file and run <code>sunlit-earth.exe</code>. On the first start, Windows might show a blue "Windows protected your PC" dialog with only a "Don't run" button. Click "More info", and a "Run anyway" button appears.</p>
+          </details>
+        </div>
+        {%- set shot = section.extra.app.windows %}{% set variants = false %}
+        <figure class="os-shot" data-gallery>{% include "shot.html" %}<figcaption>{{ shot.caption }}</figcaption></figure>
+      </div>
+
+      <div class="os-panel" id="panel-macos" role="tabpanel" aria-labelledby="tab-macos" data-os="macos">
+        <div class="os-info">
+          <h3 class="os-title"><svg class="os-icon" aria-hidden="true"><use href="#icon-apple"/></svg>macOS</h3>
+          <div class="files">
+            <a class="button primary" data-arch="aarch64" href="{{ files['macos-aarch64-app'].url }}">Apple silicon <span class="size">{{ files['macos-aarch64-app'].size }}</span></a>
+            <a class="button" data-arch="x86_64" href="{{ files['macos-x86_64-app'].url }}">Intel <span class="size">{{ files['macos-x86_64-app'].size }}</span></a>
+          </div>
+          <p class="arch-note">The app as a .zip. Not sure which one? About This Mac in the Apple menu shows an Apple M chip on Apple silicon.</p>
+          <div class="pm">
+            <h4>With Homebrew</h4>
+            <div class="commands">
+              <div class="command-list">
+                <div class="command"><code>brew install --cask sunlit-earth/tap/sunlit-earth</code><button class="copy" type="button" title="Copy to clipboard" aria-label="Copy command" hidden><svg class="i-copy" aria-hidden="true"><use href="#icon-copy"/></svg><svg class="i-check" aria-hidden="true"><use href="#icon-check"/></svg></button></div>
+              </div>
+            </div>
+          </div>
+          <details>
+            <summary>First start</summary>
+            <p>Unzip the download and move <code>Sunlit Earth.app</code> to Applications. The app is not notarized by Apple, so on the first launch macOS says it could not verify that the app is free of malware. To allow it, open System Settings, go to Privacy &amp; Security, scroll down, click "Open Anyway" next to Sunlit Earth, and confirm with your password if asked. Installing with Homebrew avoids all this.</p>
+          </details>
+        </div>
+        {%- set shot = section.extra.app.macos %}{% set variants = false %}
+        <figure class="os-shot" data-gallery>{% include "shot.html" %}<figcaption>{{ shot.caption }}</figcaption></figure>
+      </div>
+
+      <div class="os-panel" id="panel-linux" role="tabpanel" aria-labelledby="tab-linux" data-os="linux">
+        <div class="os-info">
+          <h3 class="os-title"><svg class="os-icon" aria-hidden="true"><use href="#icon-linux"/></svg>Linux</h3>
+          <div class="files">
+            <a class="button primary" data-arch="x86_64" href="{{ files['linux-x86_64'].url }}">x86-64 <span class="size">{{ files['linux-x86_64'].size }}</span></a>
+            <a class="button" data-arch="aarch64" href="{{ files['linux-aarch64'].url }}">ARM64 <span class="size">{{ files['linux-aarch64'].size }}</span></a>
+          </div>
+          <p class="arch-note">A .tar.gz archive.</p>
+          <div class="pm">
+            <h4>With Homebrew</h4>
+            <div class="commands">
+              <div class="command-list">
+                <div class="command"><code>brew install sunlit-earth/tap/sunlit-earth</code><button class="copy" type="button" title="Copy to clipboard" aria-label="Copy command" hidden><svg class="i-copy" aria-hidden="true"><use href="#icon-copy"/></svg><svg class="i-check" aria-hidden="true"><use href="#icon-check"/></svg></button></div>
+              </div>
+            </div>
+          </div>
+          <details>
+            <summary>First start</summary>
+            <p>Unpack the archive and launch <code>sunlit-earth</code> directly, if your desktop environment can do that, or open a terminal in the extracted folder and run <code>./sunlit-earth</code>. Sunlit Earth was tested on KDE, GNOME, Xfce and Cinnamon, and should work on many other desktop environments.</p>
+          </details>
+        </div>
+        {%- set shot = section.extra.app.linux %}{% set variants = false %}
+        <figure class="os-shot" data-gallery>{% include "shot.html" %}<figcaption>{{ shot.caption }}</figcaption></figure>
+      </div>
+    </div>
+
+    <p class="more-downloads">All files and older versions are on the <a href="{{ repo }}/releases">GitHub releases page</a>. You can also <a href="{{ repo }}#build-from-source">build Sunlit Earth from source</a>.</p>
+  </section>
+
+  <section id="changes" class="wrap">
+    <h2>What's new</h2>
+    <div class="releases">
+      {%- for release in data.releases[:3] %}
+      {% include "release.html" %}
+      {%- endfor %}
+    </div>
+    {%- if data.releases | length > 3 %}
+    <details class="older">
+      <summary class="button"><span class="when-closed">Show older releases</span><span class="when-open">Hide older releases</span></summary>
+      <div class="releases">
+        {%- for release in data.releases[3:] %}
+        {% include "release.html" %}
+        {%- endfor %}
+      </div>
+    </details>
+    {%- endif %}
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Sunlit Earth is free software, distributed under the terms of the <a href="{{ repo }}/blob/main/LICENSE">GPLv3</a> or later.</p>
+  <p>Built on imagery from NASA, data from EUMETSAT, and many open source projects (<a href="{{ repo }}/blob/main/assets/ATTRIBUTION.md">learn more</a>).</p>
+</footer>
+
+<dialog class="viewer" aria-label="Image viewer">
+  <figure>
+    <img alt="">
+    <figcaption></figcaption>
+  </figure>
+  <button class="viewer-prev" type="button" aria-label="Previous image">‹</button>
+  <button class="viewer-next" type="button" aria-label="Next image">›</button>
+  <button class="viewer-close" type="button" aria-label="Close">×</button>
+</dialog>
+</body>
+</html>

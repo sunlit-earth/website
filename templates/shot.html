@@ -1,0 +1,11 @@
+{#- Expects `shot` ({file, caption}), `variants` and, with variants, `sizes`. Links to the original, which the viewer shows. -#}
+{%- set path = "images/" ~ shot.file -%}
+{%- set meta = get_image_metadata(path=path) -%}
+<a class="shot" href="{{ get_url(path=path) }}">
+  {%- if variants %}
+  {%- set small = resize_image(path=path, width=640, op="fit_width", format="webp", quality=80) %}
+  <img src="{{ small.url }}" srcset="{% for w in [640, 1280, 1920, 2560] %}{% if w < meta.width %}{% set r = resize_image(path=path, width=w, op="fit_width", format="webp", quality=80) %}{{ r.url }} {{ w }}w, {% endif %}{% endfor %}{{ get_url(path=path) }} {{ meta.width }}w" sizes="{{ sizes }}" width="{{ meta.width }}" height="{{ meta.height }}" loading="lazy" decoding="async" alt="{{ shot.caption }}">
+  {%- else %}
+  <img src="{{ get_url(path=path) }}" width="{{ meta.width }}" height="{{ meta.height }}" loading="lazy" decoding="async" alt="{{ shot.caption }}">
+  {%- endif %}
+</a>

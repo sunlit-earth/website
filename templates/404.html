@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Not found: {{ config.title }}</title>
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ get_url(path='site.css', cachebust=true) }}">
+</head>
+<body>
+<main class="wrap not-found">
+  <h1>Page not found</h1>
+  <p>There is nothing at this address. The <a href="{{ get_url(path='/') }}">Sunlit Earth home page</a> has everything this site offers.</p>
+</main>
+</body>
+</html>
