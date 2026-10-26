@@ -4,9 +4,9 @@
   {%- for entry in curated.release %}{% if entry.version == release.version %}
   <ul>
     {%- for change in entry.changes %}
-    <li><span class="emoji" aria-hidden="true">{{ change.emoji }}</span><span>{{ change.text }}</span></li>
+    <li><span class="emoji" aria-hidden="true">{{ change.emoji }}</span> <span>{{ change.text }}</span></li>
     {%- endfor %}
   </ul>
   {%- endif %}{% endfor %}
-  <a class="notes-link" href="{{ release.url }}">Release notes</a>
+  <a class="notes-link" href="{{ release.url }}">Release notes<span class="visually-hidden"> for version {{ release.version }}</span></a>
 </article>

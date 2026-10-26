@@ -6,7 +6,9 @@
   <title>Not found: {{ config.title }}</title>
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
+  <link rel="icon" href="{{ get_url(path='favicon.ico') }}" sizes="32x32">
   <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png') }}">
   <link rel="stylesheet" href="{{ get_url(path='site.css', cachebust=true) }}">
 </head>
 <body>

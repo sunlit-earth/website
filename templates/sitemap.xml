@@ -1,0 +1,10 @@
+{%- set data = load_data(path="data/releases.json") -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {%- for sitemap_entry in entries %}
+    <url>
+        <loc>{{ sitemap_entry.permalink | escape_xml | safe }}</loc>
+        <lastmod>{{ data.latest.date }}</lastmod>
+    </url>
+    {%- endfor %}
+</urlset>

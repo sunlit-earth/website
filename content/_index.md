@@ -12,7 +12,7 @@ gallery = [
   { file = "wallpaper-north-august.webp", caption = "Northern hemisphere in summer" },
   { file = "wallpaper-america-west-coast.webp", caption = "View of America from the west, the Moon in the background" },
   { file = "wallpaper-ultrawide.webp", caption = "One continuous panorama across several monitors" },
-  { file = "wallpaper-earthrise-photo.webp", caption = "Earthrise" },
+  { file = "wallpaper-earthrise-photo.webp", caption = "Earthrise", alt = "Recreation of the iconic Earthrise photograph from the Apollo 8 mission" },
 ]
 
 [extra.app]

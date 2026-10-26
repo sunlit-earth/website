@@ -1,9 +1,10 @@
 base_url = "https://sunlit.earth"
 title = "Sunlit Earth"
-description = "A free and open source desktop app that renders Earth as seen from space and sets it as your wallpaper, updated with the time of day, the clouds and the positions of the Sun, Moon and stars."
+description = "A free and open source desktop app that renders Earth as seen from space as your wallpaper, changing with the time of day and the seasons, under the Sun, Moon and stars."
 default_language = "en"
 compile_sass = false
 build_search_index = false
 
 [extra]
+tagline = "Earth from space as your wallpaper"
 repo = "https://github.com/sunlit-earth/sunlit-earth"
