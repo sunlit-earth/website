@@ -15,16 +15,13 @@ A push to `main` deploys it, and so does a `repository_dispatch` of type `releas
 | `changes.toml` | The highlights of each release for "What's new", written by hand |
 | `static/images/` | The full-size screenshots. Zola writes the smaller versions to `static/processed_images/` at build time |
 | `static/site.css`, `static/site.js` | Styles, OS detection, the copy buttons and the image viewer |
-| `scripts/fetch-releases.sh` | Writes `data/releases.json`, the stable releases with their files (size as text and in bytes) and notes, from the GitHub API |
-| `scripts/write-update-feed.py` | Writes `static/releases/v1.json`, the update feed, from `data/releases.json` and `changes.toml` |
+| `scripts/write-release-data.py` | Fetches the releases from the GitHub API and writes `data/releases.json`, the stable releases with their files (size as text and in bytes) for the download section and "What's new", and `static/releases/v1.json`, the update feed, with the highlights from `changes.toml` |
 
-Prereleases are left out. The script fails if the newest release lacks one of the archives the download section links to.
+Prereleases and drafts are left out. The script fails if the newest release lacks one of the seven archives, which include every archive the download section links to.
 
 ## The update feed
 
-The app checks `https://sunlit.earth/releases/v1.json` for newer versions. It is written at build time by `scripts/write-update-feed.py`, which needs Python 3.11 or newer and nothing else, and Zola copies it to the site from `static/releases/`, which git ignores like `data/`. The file holds the 20 newest stable releases, newest first, each with its date, its release page, its highlights as plain text (the emoji of `changes.toml` stay on the page) and its archives with their URL and size in bytes, keyed as in `data/releases.json`, without whitespace between tokens. The `v1` is the format's version: a format an older app could not read gets a new file beside this one, and this one stays served. The format and the rules the app reads it by are in the app repository's `docs/plans/2026-11-22-update-check-plan.md`.
-
-The script checks every release it writes, not only the newest, and refuses to write, failing the build, when a version is not `X.Y.Z`, when a date is not `YYYY-MM-DD`, when a release page does not start with `https://github.com/sunlit-earth/sunlit-earth/releases/` or an archive URL with `https://github.com/sunlit-earth/sunlit-earth/releases/download/`, when an archive has no size in bytes, or when the newest release lacks one of the seven archives. An entry in `changes.toml` for a version that is not published yet is ignored, so the highlights can be added before the release is published.
+The app's update check reads `https://sunlit.earth/releases/v1.json` to learn about new versions. `scripts/write-release-data.py` writes it to `static/releases/` on every deploy, and locally with `uv run scripts/write-release-data.py`. Its highlights come from `changes.toml`, so add them before publishing the draft release; an entry for a version not yet published is ignored. The build fails when the release data is not safe to publish. The format is described in the app repository's `docs/plans/2026-11-22-update-check-plan.md`.
 
 ## Adding a screenshot
 
@@ -36,11 +33,10 @@ Add the release's highlights to the top of `changes.toml`: a few short entries, 
 
 ## Preview locally
 
-Needs [Zola](https://www.getzola.org/documentation/getting-started/installation/) 0.23.6, the version the workflow pins, plus `gh` (signed in), `jq` and Python 3.11 or newer (`uv run` finds one).
+Needs [Zola](https://www.getzola.org/documentation/getting-started/installation/) 0.23.6, the version the workflow pins, and Python 3.11 or newer (`uv run` finds one). The script asks the GitHub API without a token unless `GH_TOKEN` or `GITHUB_TOKEN` is set, which GitHub allows for a public repository up to 60 times an hour.
 
 ```bash
-scripts/fetch-releases.sh
-uv run scripts/write-update-feed.py
+uv run scripts/write-release-data.py
 zola serve
 ```
 
