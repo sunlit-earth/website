@@ -4,3 +4,4 @@ node_modules/
 public/
 static/processed_images/
 data/
+static/releases/
