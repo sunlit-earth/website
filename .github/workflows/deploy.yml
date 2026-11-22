@@ -34,13 +34,10 @@ jobs:
           tar -xzf "$RUNNER_TEMP/$archive" -C "$RUNNER_TEMP/zola"
           echo "$RUNNER_TEMP/zola" >> "$GITHUB_PATH"
 
-      - name: Fetch releases
-        run: scripts/fetch-releases.sh
+      - name: Write the release data and the update feed
+        run: python3 scripts/write-release-data.py
         env:
           GH_TOKEN: ${{ github.token }}
-
-      - name: Write the update feed
-        run: python3 scripts/write-update-feed.py
 
       - name: Build
         run: zola build
