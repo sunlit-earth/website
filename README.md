@@ -21,9 +21,7 @@ Prereleases and drafts are left out. The script fails if the newest release lack
 
 ## The update feed
 
-The app checks `https://sunlit.earth/releases/v1.json` for newer versions. It is written at build time by `scripts/write-release-data.py`, which needs Python 3.11 or newer and nothing else, and Zola copies it to the site from `static/releases/`, which git ignores like `data/`. The file holds the 20 newest stable releases, newest first, each with its date, its release page, its highlights as plain text (the emoji of `changes.toml` stay on the page) and its archives with their URL and size in bytes, keyed as in `data/releases.json`, without whitespace between tokens. The `v1` is the format's version: a format an older app could not read gets a new file beside this one, and this one stays served. The format and the rules the app reads it by are in the app repository's `docs/plans/2026-11-22-update-check-plan.md`.
-
-The script checks every release it writes, not only the newest, and refuses to write, failing the build, when a version is not `X.Y.Z`, when a date is not `YYYY-MM-DD`, when a release page does not start with `https://github.com/sunlit-earth/sunlit-earth/releases/` or an archive URL with `https://github.com/sunlit-earth/sunlit-earth/releases/download/`, when an archive has no size in bytes, or when the newest release lacks one of the seven archives. An entry in `changes.toml` for a version that is not published yet is ignored, so the highlights can be added before the release is published.
+The app's update check reads `https://sunlit.earth/releases/v1.json` to learn about new versions. `scripts/write-release-data.py` writes it to `static/releases/` on every deploy, and locally with `uv run scripts/write-release-data.py`. Its highlights come from `changes.toml`, so add them before publishing the draft release; an entry for a version not yet published is ignored. The build fails when the release data is not safe to publish. The format is described in the app repository's `docs/plans/2026-11-22-update-check-plan.md`.
 
 ## Adding a screenshot
 
