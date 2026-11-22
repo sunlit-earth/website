@@ -15,9 +15,16 @@ A push to `main` deploys it, and so does a `repository_dispatch` of type `releas
 | `changes.toml` | The highlights of each release for "What's new", written by hand |
 | `static/images/` | The full-size screenshots. Zola writes the smaller versions to `static/processed_images/` at build time |
 | `static/site.css`, `static/site.js` | Styles, OS detection, the copy buttons and the image viewer |
-| `scripts/fetch-releases.sh` | Writes `data/releases.json`, the stable releases with their files and notes, from the GitHub API |
+| `scripts/fetch-releases.sh` | Writes `data/releases.json`, the stable releases with their files (size as text and in bytes) and notes, from the GitHub API |
+| `scripts/write-update-feed.py` | Writes `static/releases/v1.json`, the update feed, from `data/releases.json` and `changes.toml` |
 
 Prereleases are left out. The script fails if the newest release lacks one of the archives the download section links to.
+
+## The update feed
+
+The app checks `https://sunlit.earth/releases/v1.json` for newer versions. It is written at build time by `scripts/write-update-feed.py`, which needs Python 3.11 or newer and nothing else, and Zola copies it to the site from `static/releases/`, which git ignores like `data/`. The file holds the 20 newest stable releases, newest first, each with its date, its release page, its highlights as plain text (the emoji of `changes.toml` stay on the page) and its archives with their URL and size in bytes, keyed as in `data/releases.json`, without whitespace between tokens. The `v1` is the format's version: a format an older app could not read gets a new file beside this one, and this one stays served. The format and the rules the app reads it by are in the app repository's `docs/plans/2026-11-22-update-check-plan.md`.
+
+The script checks every release it writes, not only the newest, and refuses to write, failing the build, when a version is not `X.Y.Z`, when a date is not `YYYY-MM-DD`, when a release page does not start with `https://github.com/sunlit-earth/sunlit-earth/releases/` or an archive URL with `https://github.com/sunlit-earth/sunlit-earth/releases/download/`, when an archive has no size in bytes, or when the newest release lacks one of the seven archives. An entry in `changes.toml` for a version that is not published yet is ignored, so the highlights can be added before the release is published.
 
 ## Adding a screenshot
 
@@ -25,14 +32,15 @@ Put the WebP in `static/images/` and add an entry with `file` and `caption` to `
 
 ## After a release
 
-Add the release's highlights to the top of `changes.toml`: a few short entries, one emoji each. Until then, "What's new" shows only the link to its release notes.
+Add the release's highlights to the top of `changes.toml`: a few short entries, one emoji each. Until then, "What's new" shows only the link to its release notes. The same text goes into the update feed, so add them before publishing the draft release: the app lists a release without highlights as a heading alone.
 
 ## Preview locally
 
-Needs [Zola](https://www.getzola.org/documentation/getting-started/installation/) 0.23.6, the version the workflow pins, plus `gh` (signed in) and `jq`.
+Needs [Zola](https://www.getzola.org/documentation/getting-started/installation/) 0.23.6, the version the workflow pins, plus `gh` (signed in), `jq` and Python 3.11 or newer (`uv run` finds one).
 
 ```bash
 scripts/fetch-releases.sh
+uv run scripts/write-update-feed.py
 zola serve
 ```
 

@@ -23,7 +23,7 @@ gh api "repos/$repo/releases?per_page=100" | jq '
             | select(.name | startswith("sunlit-earth-\($version)-"))
             | {
                 key: (.name | ltrimstr("sunlit-earth-\($version)-") | sub("\\.(zip|tar\\.gz)$"; "")),
-                value: {name, url: .browser_download_url, size: (.size / 1e5 | round | "\(. / 10 | floor).\(. % 10) MB")}
+                value: {name, url: .browser_download_url, size: (.size / 1e5 | round | "\(. / 10 | floor).\(. % 10) MB"), bytes: .size}
               }] | from_entries)
         })
   | {latest: .[0], releases: .}
